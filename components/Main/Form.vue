@@ -7,7 +7,7 @@
 			<input
 				type="text"
 				v-model="inputData.task"
-				class="block pt-[.3rem] outline-none leading-[0] text-[1.2rem] text-light-gray-500"
+				class="block pt-[.3rem] outline-none leading-[0] text-[1.2rem] text-light-gray-500 dark:text-dark-gray-300 bg-transparent"
 				placeholder="Create a new todo..." />
 		</div>
 		<div class="rounded-xl overflow-hidden">
@@ -16,7 +16,7 @@
 					:class="taskStyles"
 					v-for="(item, index) in taskData"
 					:key="index"
-					class="flex items-center rounded-none border-b-[1px] border-b-light-gray-300 py-[1.5rem]">
+					class="flex items-center rounded-none border-b-[1px] border-b-light-gray-300 dark:border-b-dark-gray-700 py-[1.5rem]">
 					<button
 						:class="[
 							btnStyles,
@@ -28,13 +28,16 @@
 							alt=""
 							:class="isCompleted == index ? 'w-[.8rem] h-[.8rem]' : ''" />
 					</button>
-					<p class="text-[1.2rem] text-light-gray-500 pt-[.4rem]" :class="isCompleted == index ? 'line-through' : ''">
+					<p
+						class="text-[1.2rem] text-light-gray-500 pt-[.4rem] dark:text-dark-gray-300"
+						:class="isCompleted == index ? 'line-through dark:text-dark-gray-500' : ''">
 						{{ item }}
 					</p>
 					<img :src="x" alt="delete task" class="block ml-auto w-[1.5rem] h-[1.5rem]" />
 				</li>
 			</ul>
-			<div class="bg-light-gray-100 text-[1.2rem] flex justify-between py-[1.7rem] px-[1.7rem] text-light-gray-400">
+			<div
+				class="bg-light-gray-100 dark:bg-dark-gray-200 dark:text-gray-500 text-[1.2rem] flex justify-between py-[1.7rem] px-[1.7rem] text-light-gray-400">
 				<p>5 items left</p>
 				<p class="capitalize">clear completed</p>
 			</div>
@@ -43,13 +46,13 @@
 			<button
 				v-for="(item, index) in lastBtns"
 				:key="index"
-				class="capitalize pt-[.3rem] text-[1.5rem] font-w700"
+				class="capitalize pt-[.3rem] text-[1.5rem] font-w700 dark:text-dark-gray-500"
 				:class="[which ? 'text-primary-blue' : 'text-light-gray-400']">
 				{{ item }}
 			</button>
 		</div>
 		<div
-			class="mt-[1rem] py-[4rem] text-center border-2 border-transparent rounded-xl text-light-gray-400 text-[1.4rem]">
+			class="mt-[1rem] py-[4rem] text-center border-2 border-transparent rounded-xl text-light-gray-400 dark:text-dark-gray-600 text-[1.4rem]">
 			<p>Drag and drop to reoder list</p>
 		</div>
 	</form>
@@ -83,10 +86,12 @@ const taskData = ref<string[]>([
 
 const which = ref<boolean>(false)
 
-const lastBtns = ref<string[]>(['all', 'active', 'complete'])
+const lastBtns = ref<string[]>(['all', 'active', 'completed'])
 
-const btnStyles: string = 'w-[2rem] h-[2rem] mr-[1rem] rounded-full border-[1px] border-light-gray-300'
-const taskStyles: string = 'block py-[1.1rem] bg-light-gray-100 flex items-center px-[1.7rem] rounded-lg'
+const btnStyles: string =
+	'w-[2rem] h-[2rem] mr-[1rem] rounded-full border-[1px] border-light-gray-300 dark:border-dark-gray-500'
+const taskStyles: string =
+	'block py-[1.1rem] bg-light-gray-100 dark:bg-dark-gray-200 flex items-center px-[1.7rem] rounded-lg'
 
 const lastBtnsS: string = ' '
 </script>
