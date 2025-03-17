@@ -15,6 +15,11 @@ export default {
 				w700: 700,
 			},
 			colors: {
+				primary: {
+					blue: 'hsl(220, 98%, 61%)',
+					from: 'hsl(192, 100%, 67%)',
+					to: 'hsl(280, 87%, 65%)',
+				},
 				light: {
 					gray: {
 						100: 'hsl(0, 0%, 98%)',

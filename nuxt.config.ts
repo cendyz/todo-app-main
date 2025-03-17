@@ -15,8 +15,14 @@ export default defineNuxtConfig({
 			],
 			link: [{ rel: 'icon', type: 'image/svg+xml', href: '/favicon.ico?v2' }],
 			htmlAttrs: {
-				lang: 'en'
-			  }
+				lang: 'en',
+			},
 		},
 	},
+	components: [
+		{
+			path: '~/components',
+			pathPrefix: false,
+		},
+	],
 })
