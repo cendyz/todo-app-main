@@ -20,17 +20,18 @@
 					<button
 						:class="[
 							btnStyles,
-							isCompleted == index && 'bg-gradient-to-br from-primary-from to-primary-to border-none',
+							isCompleted.includes(item) && 'bg-gradient-to-br from-primary-from to-primary-to border-none',
 						]"
+						@click="completedTask(item)"
 						class="flex justify-center items-center">
 						<img
-							:src="isCompleted == index ? check : ''"
+							:src="isCompleted.includes(item) ? check : ''"
 							alt=""
-							:class="isCompleted == index ? 'w-[.8rem] h-[.8rem]' : ''" />
+							:class="isCompleted.includes(item) ? 'w-[.8rem] h-[.8rem]' : ''" />
 					</button>
 					<p
-						class="text-[1.2rem] text-light-gray-500 pt-[.4rem] dark:text-dark-gray-300"
-						:class="isCompleted == index ? 'line-through dark:text-dark-gray-500' : ''">
+						class="text-[1.2rem] text-light-gray-500 pt-[.4rem] dark:text-dark-gray-300 transition-none"
+						:class="isCompleted.includes(item) ? 'line-through dark:text-dark-gray-500' : ''">
 						{{ item }}
 					</p>
 					<button type="button" aria-label="delete task" class="block ml-auto cursor-pointer" @click="deleteTask(item)">
@@ -40,7 +41,7 @@
 			</ul>
 			<div
 				class="bg-light-gray-100 dark:bg-dark-gray-200 dark:text-gray-500 text-[1.2rem] flex justify-between py-[1.7rem] px-[1.7rem] text-light-gray-400">
-				<p>5 items left</p>
+				<p>{{ howManyLeft }} items left</p>
 				<p class="capitalize">clear completed</p>
 			</div>
 		</div>
@@ -67,7 +68,7 @@ interface Quest {
 	task: string
 }
 
-const isCompleted = ref(0)
+const isCompleted = ref<string[]>(['Complete online JavaScript course'])
 
 const inputData = ref<Quest>({
 	task: '',
@@ -84,6 +85,14 @@ const taskData = ref<string[]>([
 	'Complete Todo App on Frontend Mentor',
 ])
 
+const howManyLeft = computed(() =>{
+	if (taskData.value.length - isCompleted.value.length < 0) {
+		return 0
+	} else {
+		return taskData.value.length - isCompleted.value.length
+	}
+})
+
 const deleteTask = (item: string): void => {
 	taskData.value = taskData.value.filter(fruit => {
 		if (fruit === item) {
@@ -91,6 +100,14 @@ const deleteTask = (item: string): void => {
 		}
 		return true
 	})
+}
+
+const completedTask = (item: string): void => {
+	if (isCompleted.value.includes(item)) {
+		isCompleted.value = isCompleted.value.filter(el => el !== item)
+	} else {
+		isCompleted.value.push(item)
+	}
 }
 
 const which = ref<boolean>(false)
