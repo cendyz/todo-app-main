@@ -11,11 +11,11 @@
 				placeholder="Create a new todo..." />
 		</div>
 		<div class="rounded-xl overflow-hidden">
-			<ul>
+			<ul v-auto-animate>
 				<li
 					:class="taskStyles"
 					v-for="(item, index) in taskData"
-					:key="index"
+					:key="item"
 					class="flex items-center rounded-none border-b-[1px] border-b-light-gray-300 dark:border-b-dark-gray-700 py-[1.5rem]">
 					<button
 						:class="[
@@ -33,7 +33,9 @@
 						:class="isCompleted == index ? 'line-through dark:text-dark-gray-500' : ''">
 						{{ item }}
 					</p>
-					<img :src="x" alt="delete task" class="block ml-auto w-[1.5rem] h-[1.5rem]" />
+					<button type="button" aria-label="delete task" class="block ml-auto cursor-pointer" @click="deleteTask(item)">
+						<img :src="x" alt="delete task" class="w-[1.5rem] h-[1.5rem]" />
+					</button>
 				</li>
 			</ul>
 			<div
@@ -71,9 +73,7 @@ const inputData = ref<Quest>({
 	task: '',
 })
 
-const test = (): void => {
-	console.log(inputData.value.task)
-}
+const test = (): void => {}
 
 const taskData = ref<string[]>([
 	'Complete online JavaScript course',
@@ -84,6 +84,15 @@ const taskData = ref<string[]>([
 	'Complete Todo App on Frontend Mentor',
 ])
 
+const deleteTask = (item: string): void => {
+	taskData.value = taskData.value.filter(fruit => {
+		if (fruit === item) {
+			return false
+		}
+		return true
+	})
+}
+
 const which = ref<boolean>(false)
 
 const lastBtns = ref<string[]>(['all', 'active', 'completed'])
@@ -92,6 +101,6 @@ const btnStyles: string =
 	'w-[2rem] h-[2rem] mr-[1rem] rounded-full border-[1px] border-light-gray-300 dark:border-dark-gray-500'
 const taskStyles: string =
 	'block py-[1.1rem] bg-light-gray-100 dark:bg-dark-gray-200 flex items-center px-[1.7rem] rounded-lg'
-
-const lastBtnsS: string = ' '
 </script>
+
+<style lang="scss" scoped></style>
