@@ -14,49 +14,50 @@
 			<ul v-auto-animate>
 				<li
 					:class="taskStyles"
-					v-for="(item, index) in taskData"
+					v-for="(item, index) in actualData"
 					:key="item"
 					class="flex items-center rounded-none border-b-[1px] border-b-light-gray-300 dark:border-b-dark-gray-700 py-[1.5rem]">
 					<button
 						:class="[
 							btnStyles,
-							isCompleted.includes(item) && 'bg-gradient-to-br from-primary-from to-primary-to border-none',
+							!activeTasks.includes(item) && 'bg-gradient-to-br from-primary-from to-primary-to border-none',
 						]"
-						@click="completedTask(item)"
+						@click="checkTask(item)"
 						class="flex justify-center items-center">
 						<img
-							:src="isCompleted.includes(item) ? check : ''"
+							:src="!activeTasks.includes(item) ? check : ''"
 							alt=""
-							:class="isCompleted.includes(item) ? 'w-[.8rem] h-[.8rem]' : ''" />
+							:class="!activeTasks.includes(item) ? 'w-[.8rem] h-[.8rem]' : ''" />
 					</button>
 					<p
 						class="text-[1.2rem] text-light-gray-500 pt-[.4rem] dark:text-dark-gray-300 transition-none"
-						:class="isCompleted.includes(item) ? 'line-through dark:text-dark-gray-500' : ''">
+						:class="!activeTasks.includes(item) ? 'line-through dark:text-dark-gray-500' : ''">
 						{{ item }}
 					</p>
-					<button type="button" aria-label="delete task" class="block ml-auto cursor-pointer" @click="deleteTask(item)">
+					<button type="button" aria-label="delete task" class="block ml-auto cursor-pointer" @click="">
 						<img :src="x" alt="delete task" class="w-[1.5rem] h-[1.5rem]" />
 					</button>
 				</li>
 			</ul>
 			<div
 				class="bg-light-gray-100 dark:bg-dark-gray-200 dark:text-gray-500 text-[1.2rem] flex justify-between py-[1.7rem] px-[1.7rem] text-light-gray-400">
-				<p>{{ howManyLeft }} items left</p>
-				<p class="capitalize">clear completed</p>
+				<p>{{}} items left</p>
+				<button type="button" class="capitalize" @click="">clear completed</button>
 			</div>
 		</div>
 		<div class="justify-center gap-x-[2rem] mt-[2rem]" :class="taskStyles">
 			<button
 				v-for="(item, index) in lastBtns"
 				:key="index"
-				class="capitalize pt-[.3rem] text-[1.5rem] font-w700 dark:text-dark-gray-500"
-				:class="[which ? 'text-primary-blue' : 'text-light-gray-400']">
+				class="capitalize pt-[.3rem] text-[1.5rem] font-w700 text-light-gray-400 dark:text-dark-gray-500 transition-none"
+				:class="[typeTask == index ? 'text-primary-blue dark:text-primary-blue' : '']"
+				@click="typeTask = index">
 				{{ item }}
 			</button>
 		</div>
 		<div
 			class="mt-[1rem] py-[4rem] text-center border-2 border-transparent rounded-xl text-light-gray-400 dark:text-dark-gray-600 text-[1.4rem]">
-			<p>Drag and drop to reoder list</p>
+			<p>Drag and drop to reorder list</p>
 		</div>
 	</form>
 </template>
@@ -74,7 +75,7 @@ const inputData = ref<Quest>({
 	task: '',
 })
 
-const test = (): void => {}
+const typeTask = ref<number>(0)
 
 const taskData = ref<string[]>([
 	'Complete online JavaScript course',
@@ -85,32 +86,23 @@ const taskData = ref<string[]>([
 	'Complete Todo App on Frontend Mentor',
 ])
 
-const howManyLeft = computed(() =>{
-	if (taskData.value.length - isCompleted.value.length < 0) {
-		return 0
-	} else {
-		return taskData.value.length - isCompleted.value.length
-	}
+const allTasks = computed(() => taskData.value)
+const activeTasks = computed(() => taskData.value.filter(el => !isCompleted.value.includes(el)))
+const completedTasks = computed(() => taskData.value.filter(el => isCompleted.value.includes(el)))
+
+const actualData = computed(() => {
+	if (typeTask.value === 1) return activeTasks.value
+	if (typeTask.value === 2) return completedTasks.value
+	return allTasks.value
 })
 
-const deleteTask = (item: string): void => {
-	taskData.value = taskData.value.filter(fruit => {
-		if (fruit === item) {
-			return false
-		}
-		return true
-	})
-}
-
-const completedTask = (item: string): void => {
+const checkTask = (item: string): void => {
 	if (isCompleted.value.includes(item)) {
-		isCompleted.value = isCompleted.value.filter(el => el !== item)
+		isCompleted.value.splice(isCompleted.value.indexOf(item), 1)
 	} else {
 		isCompleted.value.push(item)
 	}
 }
-
-const which = ref<boolean>(false)
 
 const lastBtns = ref<string[]>(['all', 'active', 'completed'])
 
