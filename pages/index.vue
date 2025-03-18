@@ -33,10 +33,6 @@ watch(
 onMounted(() => {
 	checkTheme()
 })
-
-const func = (p0: number, percent: number, aug: number, p: number): number => {
-	return 1
-}
 </script>
 
 <style lang="scss">

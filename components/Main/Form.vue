@@ -1,13 +1,13 @@
 <template>
-	<form @submit.prevent="test" class="z-10 relative">
+	<form @submit.prevent="submitNewTask" class="z-10 relative">
 		<div :class="taskStyles" class="mb-[2rem]">
 			<button type="submit">
 				<img src="" alt="" aria-label="confrim task" :class="btnStyles" />
 			</button>
 			<input
 				type="text"
-				v-model="inputData.task"
-				class="block pt-[.3rem] outline-none leading-[0] text-[1.2rem] text-light-gray-500 dark:text-dark-gray-300 bg-transparent"
+				v-model.trim="inputData.task"
+				class="block pt-[.3rem] outline-none leading-[0] w-full text-[1.2rem] text-light-gray-500 dark:text-dark-gray-300 bg-transparent"
 				placeholder="Create a new todo..." />
 		</div>
 		<div class="rounded-xl overflow-hidden">
@@ -18,6 +18,7 @@
 					:key="item"
 					class="flex items-center rounded-none border-b-[1px] border-b-light-gray-300 dark:border-b-dark-gray-700 py-[1.5rem]">
 					<button
+						type="button"
 						:class="[
 							btnStyles,
 							!activeTasks.includes(item) && 'bg-gradient-to-br from-primary-from to-primary-to border-none',
@@ -34,15 +35,19 @@
 						:class="!activeTasks.includes(item) ? 'line-through dark:text-dark-gray-500' : ''">
 						{{ item }}
 					</p>
-					<button type="button" aria-label="delete task" class="block ml-auto cursor-pointer" @click="">
+					<button
+						type="button"
+						aria-label="delete task"
+						class="block ml-auto cursor-pointer"
+						@click="deleteTask(index)">
 						<img :src="x" alt="delete task" class="w-[1.5rem] h-[1.5rem]" />
 					</button>
 				</li>
 			</ul>
 			<div
 				class="bg-light-gray-100 dark:bg-dark-gray-200 dark:text-gray-500 text-[1.2rem] flex justify-between py-[1.7rem] px-[1.7rem] text-light-gray-400">
-				<p>{{}} items left</p>
-				<button type="button" class="capitalize" @click="">clear completed</button>
+				<p>{{ itemsLeft }} items left</p>
+				<button type="button" class="capitalize" @click="clearCompletedTasks">clear completed</button>
 			</div>
 		</div>
 		<div class="justify-center gap-x-[2rem] mt-[2rem]" :class="taskStyles">
@@ -71,7 +76,7 @@ interface Quest {
 
 const isCompleted = ref<string[]>(['Complete online JavaScript course'])
 
-const inputData = ref<Quest>({
+const inputData = reactive<Quest>({
 	task: '',
 })
 
@@ -96,11 +101,31 @@ const actualData = computed(() => {
 	return allTasks.value
 })
 
+const itemsLeft = computed(() => activeTasks.value.length)
+
 const checkTask = (item: string): void => {
 	if (isCompleted.value.includes(item)) {
 		isCompleted.value.splice(isCompleted.value.indexOf(item), 1)
 	} else {
 		isCompleted.value.push(item)
+	}
+}
+
+const deleteTask = (index: number): void => {
+	taskData.value.splice(index, 1)
+}
+
+const clearCompletedTasks = (): void => {
+	taskData.value = allTasks.value.filter(el => !isCompleted.value.includes(el))
+	isCompleted.value = []
+}
+
+const submitNewTask = (): void => {
+	if (taskData.value.includes(inputData.task) || inputData.task === '') {
+		console.log('nie wolno')
+	} else {
+		taskData.value.push(inputData.task)
+		inputData.task = ''
 	}
 }
 
