@@ -1,9 +1,9 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+
 export default defineNuxtConfig({
 	compatibilityDate: '2024-11-01',
 	devtools: { enabled: true },
 	modules: ['@nuxtjs/tailwindcss', '@pinia/nuxt', '@nuxt/image', '@vueuse/nuxt', '@formkit/auto-animate'],
-	// plugins: ['~/plugins/theme.ts'],
 	app: {
 		head: {
 			title: 'Frontend Mentor',
@@ -17,6 +17,7 @@ export default defineNuxtConfig({
 			link: [{ rel: 'icon', type: 'image/svg+xml', href: '/favicon.ico?v2' }],
 			htmlAttrs: {
 				lang: 'en',
+				class: 'dark'
 			},
 		},
 	},

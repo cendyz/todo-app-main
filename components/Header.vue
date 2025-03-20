@@ -6,10 +6,10 @@
 			todo
 		</h1>
 		<Transition mode="out-in">
-			<button v-if="store.isLight" @click="store.isLight = false">
+			<button v-if="!store.isLight" @click="store.isLight = true">
 				<img :src="sun" alt="light theme'" :class="themeIconStyles" />
 			</button>
-			<button v-else @click="store.isLight = true">
+			<button v-else @click="store.isLight = false">
 				<img :src="moon" alt="dark theme" :class="themeIconStyles" />
 			</button>
 		</Transition>

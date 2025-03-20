@@ -6,7 +6,7 @@
 				type="submit"
 				@click="submitNewTask"
 				aria-labelledby="add task"
-				class="p-[.9rem] lg:p-[1.05rem] mr-[1rem] rounded-full border-[1px] border-light-gray-300 dark:border-dark-gray-500 lg:w-[2.3rem] lg:h-[2.3rem] lg:mr-[2.5rem]"></button>
+				class="p-[0.9rem] px-[.95rem] lg:p-[1.09rem] mr-[1rem] rounded-full border-[1px] border-light-gray-300 dark:border-dark-gray-500 lg:w-[2.3rem] lg:h-[2.3rem] lg:mr-[2.5rem]"></button>
 			<input
 				type="text"
 				v-model.trim="inputData.task"
@@ -14,8 +14,8 @@
 				placeholder="Create a new todo..." />
 		</div>
 		<div class="rounded-xl overflow-hidden">
-			<div v-auto-animate>
-				<div
+			<ul v-auto-animate>
+				<li
 					:draggable="true"
 					@dragstart="startDragging(index)"
 					@dragover.prevent
@@ -34,8 +34,9 @@
 						@click="checkTask(item)"
 						class="flex justify-center items-center">
 						<img
-							:src="!activeTasks.includes(item) ? check : ''"
-							:alt="!activeTasks.includes(item) ? 'checked' : ''"
+							v-if="!activeTasks.includes(item)"
+							:src="check"
+							alt="checked task"
 							:class="!activeTasks.includes(item) ? 'w-[.8rem] h-[.8rem]' : ''" />
 					</button>
 					<p
@@ -50,8 +51,8 @@
 						@click="deleteTask(index)">
 						<img :src="x" alt="delete task" class="w-[1.5rem] h-[1.5rem]" />
 					</button>
-				</div>
-			</div>
+				</li>
+			</ul>
 			<div
 				class="bg-light-gray-100 dark:bg-dark-gray-200 dark:text-gray-500 text-[1.2rem] flex justify-between items-center py-[1.7rem] px-[1.7rem] text-light-gray-400 lg:text-[1.6rem] lg:py-[.7rem] lg:px-[2.5rem]">
 				<p>{{ itemsLeft }} items left</p>
