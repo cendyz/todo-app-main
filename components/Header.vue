@@ -1,6 +1,6 @@
 <template>
 	<header
-		class="px-[2.5rem] py-[5rem] flex justify-between items-center relative z-10 container lg:w-[45rem] lg:pt-[9rem]">
+		class="px-[2.5rem] py-[5rem] flex justify-between items-center relative z-10 container lg:w-[50rem] lg:pt-[9rem]">
 		<h1
 			class="uppercase text-light-gray-100 font-w700 text-[2.6rem] tracking-[1rem] leading-[0] pt-[.7rem] lg:text-[4rem]">
 			todo
