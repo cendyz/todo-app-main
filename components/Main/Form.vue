@@ -197,8 +197,6 @@ const btnStyles: string =
 	'w-[2rem] h-[2rem] mr-[1rem] rounded-full border-[1px] border-light-gray-300 dark:border-dark-gray-500 lg:w-[2.3rem] lg:h-[2.3rem] lg:mr-[2.5rem]'
 const taskStyles: string =
 	'py-[1.1rem] bg-light-gray-100 dark:bg-dark-gray-200 flex items-center px-[1.7rem] lg:px-[2.5rem]'
-
-const topStyles: string = 'rounded-xl'
 </script>
 
 <style lang="scss" scoped>
