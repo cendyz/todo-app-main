@@ -7,13 +7,17 @@
 import { useToDoStore } from '~/store/toDo'
 const store = useToDoStore()
 
-const checkTheme = (): void => {
-	if (window.matchMedia('(prefers-color-scheme: light)').matches) {
-		document.documentElement.classList.add('light')
-		store.isLight = false
-	} else {
-		document.documentElement.classList.add('dark')
-		store.isLight = true
+const checkTheme = async(): Promise<void> => {
+	try {
+		if (window.matchMedia('(prefers-color-scheme: light)').matches) {
+			document.documentElement.classList.add('light')
+			store.isLight = false
+		} else {
+			document.documentElement.classList.add('dark')
+			store.isLight = true
+		}
+	} catch (error) {
+		
 	}
 }
 

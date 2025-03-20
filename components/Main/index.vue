@@ -1,5 +1,5 @@
 <template>
-	<main class="px-[2.5rem] lg:w-[50rem] lg:mx-auto">
+	<main class="px-[2.5rem] lg:w-[70rem] lg:mx-auto container">
 		<Form />
 		<Transition mode="out-in">
 			<picture v-if="store.isLight">

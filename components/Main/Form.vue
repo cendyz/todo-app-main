@@ -1,13 +1,14 @@
 <template>
-	<form @submit.prevent="submitNewTask" class="z-10 relative">
-		<div :class="taskStyles" class="mb-[2rem]">
+	<form @submit.prevent="submitNewTask" class="z-10 relative rounded-xl overflow-hidden">
+		<div
+			class="mb-[2rem] lg:py-[1.5rem] py-[1.1rem] bg-light-gray-100 dark:bg-dark-gray-200 flex items-center px-[1.7rem] rounded-xl lg:px-[2.5rem]">
 			<button type="submit">
 				<img src="" alt="" aria-label="confrim task" :class="btnStyles" />
 			</button>
 			<input
 				type="text"
 				v-model.trim="inputData.task"
-				class="block pt-[.3rem] outline-none leading-[0] w-full text-[1.2rem] text-light-gray-500 dark:text-dark-gray-300 bg-transparent"
+				class="block pt-[.3rem] outline-none leading-[0] w-full text-[1.2rem] text-light-gray-500 dark:text-dark-gray-300 bg-transparent lg:text-[1.8rem] placeholder:text-neutral-500"
 				placeholder="Create a new todo..." />
 		</div>
 		<div class="rounded-xl overflow-hidden">
@@ -35,7 +36,7 @@
 							:class="!activeTasks.includes(item) ? 'w-[.8rem] h-[.8rem]' : ''" />
 					</button>
 					<p
-						class="text-[1.2rem] text-light-gray-500 pt-[.4rem] dark:text-dark-gray-300 transition-none"
+						class="text-[1.2rem] text-light-gray-500 pt-[.4rem] dark:text-dark-gray-300 transition-none lg:text-[1.7rem]"
 						:class="!activeTasks.includes(item) ? 'line-through dark:text-dark-gray-500' : ''">
 						{{ item }}
 					</p>
@@ -49,16 +50,26 @@
 				</li>
 			</ul>
 			<div
-				class="bg-light-gray-100 dark:bg-dark-gray-200 dark:text-gray-500 text-[1.2rem] flex justify-between py-[1.7rem] px-[1.7rem] text-light-gray-400">
+				class="bg-light-gray-100 dark:bg-dark-gray-200 dark:text-gray-500 text-[1.2rem] flex justify-between items-center py-[1.7rem] px-[1.7rem] text-light-gray-400 lg:text-[1.6rem] lg:py-[.7rem] lg:px-[2.5rem]">
 				<p>{{ itemsLeft }} items left</p>
-				<button type="button" class="capitalize" @click="clearCompletedTasks">clear completed</button>
+				<div class="justify-center gap-x-[2rem] hidden lg:flex" :class="taskStyles">
+					<button
+						v-for="(item, index) in lastBtns"
+						:key="index"
+						class="capitalize pt-[.3rem] text-[1.5rem] font-w700 text-light-gray-400 dark:text-dark-gray-500 transition-none lg:text-[1.6rem]"
+						:class="[typeTask == index ? 'text-primary-blue dark:text-primary-blue' : '']"
+						@click="typeTask = index">
+						{{ item }}
+					</button>
+				</div>
+				<button type="button" class="capitalize lg:text-[1.6rem]" @click="clearCompletedTasks">clear completed</button>
 			</div>
 		</div>
-		<div class="justify-center gap-x-[2rem] mt-[2rem]" :class="taskStyles">
+		<div class="justify-center gap-x-[2rem] mt-[2rem] lg:hidden" :class="taskStyles">
 			<button
 				v-for="(item, index) in lastBtns"
 				:key="index"
-				class="capitalize pt-[.3rem] text-[1.5rem] font-w700 text-light-gray-400 dark:text-dark-gray-500 transition-none"
+				class="capitalize pt-[.3rem] text-[1.5rem] font-w700 text-light-gray-400 dark:text-dark-gray-500 transition-none lg:text-[1.6rem]"
 				:class="[typeTask == index ? 'text-primary-blue dark:text-primary-blue' : '']"
 				@click="typeTask = index">
 				{{ item }}
@@ -69,7 +80,7 @@
 			@dragleave="leaveDiv"
 			@dragover.prevent
 			@drop="dropDiv"
-			class="my-[3rem] py-[4rem] text-center border-2 border-transparent rounded-xl text-light-gray-400 dark:text-dark-gray-600 text-[1.4rem]">
+			class="my-[3rem] py-[4rem] text-center border-2 border-transparent rounded-xl text-light-gray-400 dark:text-dark-gray-600 text-[1.4rem] lg:text-[1.6rem]">
 			<p>Drag and drop to reorder list</p>
 		</div>
 	</form>
@@ -166,7 +177,7 @@ const leaveDiv = (e: DragEvent): void => {
 	}
 }
 
-const dropDiv = (e:DragEvent): void => {
+const dropDiv = (e: DragEvent): void => {
 	let cleanSet = new Set<number>([])
 	while (cleanSet.size < taskData.value.length) {
 		cleanSet.add(Math.floor(Math.random() * taskData.value.length))
@@ -183,9 +194,11 @@ const dropDiv = (e:DragEvent): void => {
 const lastBtns = ref<string[]>(['all', 'active', 'completed'])
 
 const btnStyles: string =
-	'w-[2rem] h-[2rem] mr-[1rem] rounded-full border-[1px] border-light-gray-300 dark:border-dark-gray-500'
+	'w-[2rem] h-[2rem] mr-[1rem] rounded-full border-[1px] border-light-gray-300 dark:border-dark-gray-500 lg:w-[2.3rem] lg:h-[2.3rem] lg:mr-[2.5rem]'
 const taskStyles: string =
-	'block py-[1.1rem] bg-light-gray-100 dark:bg-dark-gray-200 flex items-center px-[1.7rem] rounded-lg'
+	'py-[1.1rem] bg-light-gray-100 dark:bg-dark-gray-200 flex items-center px-[1.7rem] lg:px-[2.5rem]'
+
+const topStyles: string = 'rounded-xl'
 </script>
 
 <style lang="scss" scoped>
