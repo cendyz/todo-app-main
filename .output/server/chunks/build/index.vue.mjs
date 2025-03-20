@@ -1,7 +1,6 @@
 import { defineComponent, ref, mergeProps, unref, useSSRContext, reactive, computed, resolveDirective, watch } from 'vue';
 import { ssrRenderAttrs, ssrRenderAttr, ssrRenderClass, ssrGetDirectiveProps, ssrRenderList, ssrInterpolate, ssrRenderComponent } from 'vue/server-renderer';
-import { defineStore } from 'pinia';
-import { _ as _export_sfc } from './server.mjs';
+import { d as useToDoStore, _ as _export_sfc } from './server.mjs';
 import '../nitro/nitro.mjs';
 import 'node:http';
 import 'node:https';
@@ -12,15 +11,8 @@ import 'node:path';
 import 'node:crypto';
 import 'node:url';
 import 'ipx';
+import 'pinia';
 import 'vue-router';
-
-const useToDoStore = defineStore("toDo", {
-  state: () => {
-    return {
-      isLight: false
-    };
-  }
-});
 
 const moon = "data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/2000/svg'%20width='26'%20height='26'%3e%3cpath%20fill='%23FFF'%20fill-rule='evenodd'%20d='M13%200c.81%200%201.603.074%202.373.216C10.593%201.199%207%205.43%207%2010.5%207%2016.299%2011.701%2021%2017.5%2021c2.996%200%205.7-1.255%207.613-3.268C23.22%2022.572%2018.51%2026%2013%2026%205.82%2026%200%2020.18%200%2013S5.82%200%2013%200z'/%3e%3c/svg%3e";
 
@@ -88,22 +80,22 @@ const _sfc_main$2 = /* @__PURE__ */ defineComponent({
     const lastBtns = ref(["all", "active", "completed"]);
     return (_ctx, _push, _parent, _attrs) => {
       const _directive_auto_animate = resolveDirective("auto-animate");
-      _push(`<form${ssrRenderAttrs(mergeProps({ class: "z-10 relative rounded-xl overflow-hidden" }, _attrs))} data-v-5ef42b80><div class="mb-[2rem] lg:py-[1.5rem] py-[1.1rem] bg-light-gray-100 dark:bg-dark-gray-200 flex items-center px-[1.7rem] rounded-xl lg:px-[2.5rem]" data-v-5ef42b80><button type="submit" data-v-5ef42b80><img${ssrRenderAttr("src", "")} alt="" aria-label="confrim task" class="${ssrRenderClass(btnStyles)}" data-v-5ef42b80></button><input type="text"${ssrRenderAttr("value", unref(inputData).task)} class="block pt-[.3rem] outline-none leading-[0] w-full text-[1.2rem] text-light-gray-500 dark:text-dark-gray-300 bg-transparent lg:text-[1.8rem] placeholder:text-neutral-500" placeholder="Create a new todo..." data-v-5ef42b80></div><div class="rounded-xl overflow-hidden" data-v-5ef42b80><ul${ssrRenderAttrs(ssrGetDirectiveProps(_ctx, _directive_auto_animate))} data-v-5ef42b80><!--[-->`);
+      _push(`<form${ssrRenderAttrs(mergeProps({ class: "z-10 relative rounded-xl overflow-hidden" }, _attrs))} data-v-cb9192da><div class="mb-[2rem] lg:py-[1.5rem] py-[1.1rem] bg-light-gray-100 dark:bg-dark-gray-200 flex items-center px-[1.7rem] rounded-xl lg:px-[2.5rem]" data-v-cb9192da><button type="submit" aria-labelledby="add task" class="p-[.9rem] lg:p-[1.05rem] mr-[1rem] rounded-full border-[1px] border-light-gray-300 dark:border-dark-gray-500 lg:w-[2.3rem] lg:h-[2.3rem] lg:mr-[2.5rem]" data-v-cb9192da></button><input type="text"${ssrRenderAttr("value", unref(inputData).task)} class="block pt-[.3rem] outline-none leading-[0] w-full text-[1.2rem] text-light-gray-500 dark:text-dark-gray-300 bg-transparent lg:text-[1.8rem] placeholder:text-neutral-500" placeholder="Create a new todo..." data-v-cb9192da></div><div class="rounded-xl overflow-hidden" data-v-cb9192da><div${ssrRenderAttrs(ssrGetDirectiveProps(_ctx, _directive_auto_animate))} data-v-cb9192da><!--[-->`);
       ssrRenderList(unref(actualData), (item, index) => {
-        _push(`<li${ssrRenderAttr("draggable", true)} class="${ssrRenderClass([taskStyles, "flex items-center rounded-none border-b-[1px] border-b-light-gray-300 dark:border-b-dark-gray-700 cursor-move py-[1.5rem] active:cursor-grab"])}" data-v-5ef42b80><button type="button" class="${ssrRenderClass([[
+        _push(`<div${ssrRenderAttr("draggable", true)} class="${ssrRenderClass([taskStyles, "flex items-center rounded-none border-b-[1px] border-b-light-gray-300 dark:border-b-dark-gray-700 cursor-move py-[1.5rem] active:cursor-grab"])}" data-v-cb9192da><button aria-labelledby="checking image" type="button" class="${ssrRenderClass([[
           btnStyles,
           !unref(activeTasks).includes(item) && "bg-gradient-to-br from-primary-from to-primary-to border-none"
-        ], "flex justify-center items-center"])}" data-v-5ef42b80><img${ssrRenderAttr("src", !unref(activeTasks).includes(item) ? unref(check) : "")} alt="" class="${ssrRenderClass(!unref(activeTasks).includes(item) ? "w-[.8rem] h-[.8rem]" : "")}" data-v-5ef42b80></button><p class="${ssrRenderClass([!unref(activeTasks).includes(item) ? "line-through dark:text-dark-gray-500" : "", "text-[1.2rem] text-light-gray-500 pt-[.4rem] dark:text-dark-gray-300 transition-none lg:text-[1.7rem]"])}" data-v-5ef42b80>${ssrInterpolate(item)}</p><button type="button" aria-label="delete task" class="block ml-auto cursor-pointer" data-v-5ef42b80><img${ssrRenderAttr("src", unref(x))} alt="delete task" class="w-[1.5rem] h-[1.5rem]" data-v-5ef42b80></button></li>`);
+        ], "flex justify-center items-center"])}" data-v-cb9192da><img${ssrRenderAttr("src", !unref(activeTasks).includes(item) ? unref(check) : "")}${ssrRenderAttr("alt", !unref(activeTasks).includes(item) ? "checked" : "")} class="${ssrRenderClass(!unref(activeTasks).includes(item) ? "w-[.8rem] h-[.8rem]" : "")}" data-v-cb9192da></button><p class="${ssrRenderClass([!unref(activeTasks).includes(item) ? "line-through dark:text-dark-gray-500" : "", "text-[1.2rem] text-light-gray-500 pt-[.4rem] dark:text-dark-gray-300 transition-none lg:text-[1.7rem]"])}" data-v-cb9192da>${ssrInterpolate(item)}</p><button type="button" aria-labelledby="delete task" class="block ml-auto cursor-pointer" data-v-cb9192da><img${ssrRenderAttr("src", unref(x))} alt="delete task" class="w-[1.5rem] h-[1.5rem]" data-v-cb9192da></button></div>`);
       });
-      _push(`<!--]--></ul><div class="bg-light-gray-100 dark:bg-dark-gray-200 dark:text-gray-500 text-[1.2rem] flex justify-between items-center py-[1.7rem] px-[1.7rem] text-light-gray-400 lg:text-[1.6rem] lg:py-[.7rem] lg:px-[2.5rem]" data-v-5ef42b80><p data-v-5ef42b80>${ssrInterpolate(unref(itemsLeft))} items left</p><div class="${ssrRenderClass([taskStyles, "justify-center gap-x-[2rem] hidden lg:flex"])}" data-v-5ef42b80><!--[-->`);
+      _push(`<!--]--></div><div class="bg-light-gray-100 dark:bg-dark-gray-200 dark:text-gray-500 text-[1.2rem] flex justify-between items-center py-[1.7rem] px-[1.7rem] text-light-gray-400 lg:text-[1.6rem] lg:py-[.7rem] lg:px-[2.5rem]" data-v-cb9192da><p data-v-cb9192da>${ssrInterpolate(unref(itemsLeft))} items left</p><div class="${ssrRenderClass([taskStyles, "justify-center gap-x-[2rem] hidden lg:flex"])}" data-v-cb9192da><!--[-->`);
       ssrRenderList(unref(lastBtns), (item, index) => {
-        _push(`<button class="${ssrRenderClass([[unref(typeTask) == index ? "text-primary-blue dark:text-primary-blue" : ""], "capitalize pt-[.3rem] text-[1.5rem] font-w700 text-light-gray-400 dark:text-dark-gray-500 transition-none lg:text-[1.6rem]"])}" data-v-5ef42b80>${ssrInterpolate(item)}</button>`);
+        _push(`<button class="${ssrRenderClass([[unref(typeTask) == index ? "text-primary-blue dark:text-primary-blue" : ""], "capitalize pt-[.3rem] text-[1.5rem] font-w700 text-light-gray-400 dark:text-dark-gray-500 transition-none lg:text-[1.6rem]"])}" data-v-cb9192da>${ssrInterpolate(item)}</button>`);
       });
-      _push(`<!--]--></div><button type="button" class="capitalize lg:text-[1.6rem]" data-v-5ef42b80>clear completed</button></div></div><div class="${ssrRenderClass([taskStyles, "justify-center gap-x-[2rem] mt-[2rem] lg:hidden"])}" data-v-5ef42b80><!--[-->`);
+      _push(`<!--]--></div><button type="button" class="capitalize lg:text-[1.6rem]" data-v-cb9192da>clear completed</button></div></div><div class="${ssrRenderClass([taskStyles, "justify-center gap-x-[2rem] mt-[2rem] lg:hidden"])}" data-v-cb9192da><!--[-->`);
       ssrRenderList(unref(lastBtns), (item, index) => {
-        _push(`<button class="${ssrRenderClass([[unref(typeTask) == index ? "text-primary-blue dark:text-primary-blue" : ""], "capitalize pt-[.3rem] text-[1.5rem] font-w700 text-light-gray-400 dark:text-dark-gray-500 transition-none lg:text-[1.6rem]"])}" data-v-5ef42b80>${ssrInterpolate(item)}</button>`);
+        _push(`<button class="${ssrRenderClass([[unref(typeTask) == index ? "text-primary-blue dark:text-primary-blue" : ""], "capitalize pt-[.3rem] text-[1.5rem] font-w700 text-light-gray-400 dark:text-dark-gray-500 transition-none lg:text-[1.6rem]"])}" data-v-cb9192da>${ssrInterpolate(item)}</button>`);
       });
-      _push(`<!--]--></div><div class="my-[3rem] py-[4rem] text-center border-2 border-transparent rounded-xl text-light-gray-400 dark:text-dark-gray-600 text-[1.4rem] lg:text-[1.6rem]" data-v-5ef42b80><p data-v-5ef42b80>Drag and drop to reorder list</p></div></form>`);
+      _push(`<!--]--></div><div class="my-[3rem] py-[4rem] text-center border-2 border-transparent rounded-xl text-light-gray-400 dark:text-dark-gray-600 text-[1.4rem] lg:text-[1.6rem]" data-v-cb9192da><p data-v-cb9192da>Drag and drop to reorder list</p></div></form>`);
     };
   }
 });
@@ -114,7 +106,7 @@ _sfc_main$2.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("components/Main/Form.vue");
   return _sfc_setup$2 ? _sfc_setup$2(props, ctx) : void 0;
 };
-const __nuxt_component_0 = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["__scopeId", "data-v-5ef42b80"]]);
+const __nuxt_component_0 = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["__scopeId", "data-v-cb9192da"]]);
 
 const lightMobile = "" + __buildAssetsURL("bg-mobile-light.eXTHhUPU.jpg");
 

@@ -2,9 +2,11 @@
 	<form @submit.prevent="submitNewTask" class="z-10 relative rounded-xl overflow-hidden">
 		<div
 			class="mb-[2rem] lg:py-[1.5rem] py-[1.1rem] bg-light-gray-100 dark:bg-dark-gray-200 flex items-center px-[1.7rem] rounded-xl lg:px-[2.5rem]">
-			<button type="submit">
-				<img src="" alt="" aria-label="confrim task" :class="btnStyles" />
-			</button>
+			<button
+				type="submit"
+				@click="submitNewTask"
+				aria-labelledby="add task"
+				class="p-[.9rem] lg:p-[1.05rem] mr-[1rem] rounded-full border-[1px] border-light-gray-300 dark:border-dark-gray-500 lg:w-[2.3rem] lg:h-[2.3rem] lg:mr-[2.5rem]"></button>
 			<input
 				type="text"
 				v-model.trim="inputData.task"
@@ -12,8 +14,8 @@
 				placeholder="Create a new todo..." />
 		</div>
 		<div class="rounded-xl overflow-hidden">
-			<ul v-auto-animate>
-				<li
+			<div v-auto-animate>
+				<div
 					:draggable="true"
 					@dragstart="startDragging(index)"
 					@dragover.prevent
@@ -23,6 +25,7 @@
 					:key="item"
 					class="flex items-center rounded-none border-b-[1px] border-b-light-gray-300 dark:border-b-dark-gray-700 cursor-move py-[1.5rem] active:cursor-grab">
 					<button
+						aria-labelledby="checking image"
 						type="button"
 						:class="[
 							btnStyles,
@@ -32,7 +35,7 @@
 						class="flex justify-center items-center">
 						<img
 							:src="!activeTasks.includes(item) ? check : ''"
-							alt=""
+							:alt="!activeTasks.includes(item) ? 'checked' : ''"
 							:class="!activeTasks.includes(item) ? 'w-[.8rem] h-[.8rem]' : ''" />
 					</button>
 					<p
@@ -42,13 +45,13 @@
 					</p>
 					<button
 						type="button"
-						aria-label="delete task"
+						aria-labelledby="delete task"
 						class="block ml-auto cursor-pointer"
 						@click="deleteTask(index)">
 						<img :src="x" alt="delete task" class="w-[1.5rem] h-[1.5rem]" />
 					</button>
-				</li>
-			</ul>
+				</div>
+			</div>
 			<div
 				class="bg-light-gray-100 dark:bg-dark-gray-200 dark:text-gray-500 text-[1.2rem] flex justify-between items-center py-[1.7rem] px-[1.7rem] text-light-gray-400 lg:text-[1.6rem] lg:py-[.7rem] lg:px-[2.5rem]">
 				<p>{{ itemsLeft }} items left</p>

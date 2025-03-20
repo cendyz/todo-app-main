@@ -1,6 +1,6 @@
 import { shallowReactive, reactive, effectScope, getCurrentScope, hasInjectionContext, getCurrentInstance, toRef, inject, shallowRef, isReadonly, isRef, isShallow, isReactive, toRaw, defineComponent, provide, h, ref, watch, Suspense, Fragment, useSSRContext, defineAsyncComponent, unref, mergeProps, onErrorCaptured, onServerPrefetch, createVNode, resolveDynamicComponent, createApp } from 'vue';
 import { i as createHooks, j as getContext, e as createError$1, t as toRouteMatcher, k as createRouter, l as defu, m as hasProtocol, n as joinURL, w as withQuery, s as sanitizeStatusCode, o as isScriptProtocol, q as executeAsync } from '../nitro/nitro.mjs';
-import { shouldHydrate, createPinia, setActivePinia } from 'pinia';
+import { shouldHydrate, createPinia, setActivePinia, defineStore } from 'pinia';
 import { START_LOCATION, createMemoryHistory, createRouter as createRouter$1, RouterView } from 'vue-router';
 import { ssrRenderComponent, ssrRenderSuspense, ssrRenderVNode } from 'vue/server-renderer';
 
@@ -789,8 +789,17 @@ const plugin_h_pA3yusmDTJ8f7Mvx2nEWTVV4itdwLzF7i0rRgd_FI = defineNuxtPlugin((app
   app.vueApp.directive("auto-animate", vAutoAnimate);
 });
 
-const theme_tdsVqRMdA839UcewBv4sMbniXnP_CYVqKhQ3A8RB1lw = () => {
-};
+const useToDoStore = defineStore("toDo", {
+  state: () => {
+    return {
+      isLight: false
+    };
+  }
+});
+
+const theme_tdsVqRMdA839UcewBv4sMbniXnP_CYVqKhQ3A8RB1lw = defineNuxtPlugin((nuxtApp) => {
+  useToDoStore();
+});
 
 const plugins = [
   payloadPlugin,
@@ -1056,5 +1065,5 @@ const server = /*#__PURE__*/Object.freeze({
   default: entry$1
 });
 
-export { _export_sfc as _, useNuxtApp as a, useRuntimeConfig as b, nuxtLinkDefaults as c, navigateTo as n, resolveRouteObject as r, server as s, tryUseNuxtApp as t, useRouter as u };
+export { _export_sfc as _, useNuxtApp as a, useRuntimeConfig as b, nuxtLinkDefaults as c, useToDoStore as d, navigateTo as n, resolveRouteObject as r, server as s, tryUseNuxtApp as t, useRouter as u };
 //# sourceMappingURL=server.mjs.map
