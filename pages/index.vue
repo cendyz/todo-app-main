@@ -46,7 +46,7 @@ onMounted(() => {
 
 .light {
 	body {
-		background-color: hsl(236, 33%, 92%);
+		background-color: white;
 	}
 }
 
