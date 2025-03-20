@@ -13,10 +13,14 @@
 		<div class="rounded-xl overflow-hidden">
 			<ul v-auto-animate>
 				<li
+					:draggable="true"
+					@dragstart="dragStart(index)"
+					@dragover.prevent
+					@drop="drop(index)"
 					:class="taskStyles"
 					v-for="(item, index) in actualData"
 					:key="item"
-					class="flex items-center rounded-none border-b-[1px] border-b-light-gray-300 dark:border-b-dark-gray-700 py-[1.5rem]">
+					class="flex items-center rounded-none border-b-[1px] border-b-light-gray-300 dark:border-b-dark-gray-700 cursor-move py-[1.5rem] active:cursor-grab">
 					<button
 						type="button"
 						:class="[
@@ -61,7 +65,11 @@
 			</button>
 		</div>
 		<div
-			class="mt-[1rem] py-[4rem] text-center border-2 border-transparent rounded-xl text-light-gray-400 dark:text-dark-gray-600 text-[1.4rem]">
+			@dragenter="dragEnterDiv"
+			@dragleave="dragLeaveDiv"
+			@dragover.prevent
+			@drop="dropOnDiv"
+			class="my-[3rem] py-[4rem] text-center border-2 border-transparent rounded-xl text-light-gray-400 dark:text-dark-gray-600 text-[1.4rem]">
 			<p>Drag and drop to reorder list</p>
 		</div>
 	</form>
@@ -122,11 +130,54 @@ const clearCompletedTasks = (): void => {
 
 const submitNewTask = (): void => {
 	if (taskData.value.includes(inputData.task) || inputData.task === '') {
-		console.log('nie wolno')
 	} else {
 		taskData.value.push(inputData.task)
 		inputData.task = ''
 	}
+}
+
+const draggedItemIndex = ref<number | null>(null)
+
+const dragStart = (index: number) => {
+	draggedItemIndex.value = index
+}
+
+const drop = (index: number) => {
+	if (draggedItemIndex.value === null) return
+
+	const movedItem = taskData.value[draggedItemIndex.value]
+	taskData.value.splice(draggedItemIndex.value, 1)
+	taskData.value.splice(index, 0, movedItem)
+
+	draggedItemIndex.value = null
+}
+
+const dragEnterDiv = (event: DragEvent) => {
+	;(event.currentTarget as HTMLElement).classList.add('draggedBorder')
+}
+
+const dragLeaveDiv = (event: DragEvent) => {
+	const target = event.currentTarget as HTMLElement
+	const related = event.relatedTarget as HTMLElement | null
+
+	if (!target.contains(related)) {
+		target.classList.remove('draggedBorder')
+	}
+}
+
+const dropOnDiv = (event: DragEvent) => {
+	;(event.currentTarget as HTMLElement).classList.remove('draggedBorder')
+	let newOrder = new Set<number>([])
+	while (newOrder.size < taskData.value.length) {
+		newOrder.add(Math.floor(Math.random() * taskData.value.length))
+	}
+	const newArr = Array.from(newOrder)
+	let reorderedTasks = new Array(taskData.value.length)
+	newArr.forEach((newIndex, i) => {
+		reorderedTasks[newIndex] = taskData.value[i]
+	})
+
+	taskData.value = reorderedTasks
 }
 
 const lastBtns = ref<string[]>(['all', 'active', 'completed'])
@@ -137,4 +188,8 @@ const taskStyles: string =
 	'block py-[1.1rem] bg-light-gray-100 dark:bg-dark-gray-200 flex items-center px-[1.7rem] rounded-lg'
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.draggedBorder {
+	border-color: hsl(220, 98%, 61%);
+}
+</style>
