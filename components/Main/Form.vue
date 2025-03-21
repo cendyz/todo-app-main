@@ -18,6 +18,7 @@
 				<li
 					:draggable="true"
 					@dragstart="startDragging(index)"
+						
 					@dragover.prevent
 					@drop="dragDrop(index)"
 					:class="taskStyles"
