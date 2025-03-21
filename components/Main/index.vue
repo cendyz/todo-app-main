@@ -23,7 +23,7 @@ import { useToDoStore } from '~/store/toDo'
 
 const store = useToDoStore()
 
-const imgClass: string = 'absolute top-0 left-0 z-0 w-full'
+const imgClass: string = 'absolute top-0 left-0 z-0 w-full pointer-events-none'
 </script>
 
 <style scoped lang="scss">
