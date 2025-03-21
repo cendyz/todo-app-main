@@ -5,7 +5,7 @@
 			<button
 				type="submit"
 				@click="submitNewTask"
-				aria-labelledby="add task"
+				aria-label="add task"
 				class="p-[0.9rem] px-[.95rem] lg:p-[1.09rem] mr-[1rem] rounded-full border-[1px] border-light-gray-300 dark:border-dark-gray-500 lg:w-[2.3rem] lg:h-[2.3rem] lg:mr-[2.5rem]"></button>
 			<input
 				type="text"
@@ -27,7 +27,7 @@
 					:key="item"
 					class="flex items-center rounded-none border-b-[1px] border-b-light-gray-300 dark:border-b-dark-gray-700 cursor-move py-[1.5rem] active:cursor-grab">
 					<button
-						aria-labelledby="checking image"
+						aria-label="checking image"
 						type="button"
 						:class="[
 							btnStyles,
@@ -48,7 +48,7 @@
 					</p>
 					<button
 						type="button"
-						aria-labelledby="delete task"
+						aria-label="delete task"
 						class="block ml-auto cursor-pointer"
 						@click="deleteTask(index)">
 						<img :src="x" alt="delete task" class="w-[1.5rem] h-[1.5rem]" />
