@@ -17,11 +17,11 @@
 			<ul v-auto-animate>
 				<li
 					:draggable="true"
-					@dragstart="startDragging(index)"
-					@dragenter="dragEnterLi(index, $event)"
-					@dragleave="dragLeaveLi"
+					@dragstart="liStartDrag(index)"
 					@dragover.prevent
-					@drop="dragDrop(index)"
+					@dragenter="liDragEnter(index, $event)"
+					@dragleave="liDragLeave"
+					@drop="liDrop(index, $event)"
 					:class="taskStyles"
 					v-for="(item, index) in actualData"
 					:key="item"
@@ -42,7 +42,7 @@
 							:class="!activeTasks.includes(item) ? 'w-[.8rem] h-[.8rem]' : ''" />
 					</button>
 					<p
-						class="text-[1.2rem] text-light-gray-500 pt-[.4rem] dark:text-dark-gray-300 transition-none lg:text-[1.7rem]"
+						class="text-[1.2rem] text-light-gray-500 pt-[.4rem] dark:text-dark-gray-300 transition-none lg:text-[1.7rem] pointer-events-none"
 						:class="!activeTasks.includes(item) ? 'line-through dark:text-dark-gray-500' : ''">
 						{{ item }}
 					</p>
@@ -58,7 +58,7 @@
 			<div
 				class="bg-light-gray-100 dark:bg-dark-gray-200 dark:text-gray-500 text-[1.2rem] flex justify-between items-center py-[1.7rem] px-[1.7rem] text-light-gray-400 lg:text-[1.6rem] lg:py-[.7rem] lg:px-[2.5rem]">
 				<p>{{ itemsLeft }} items left</p>
-				<div class="justify-center gap-x-[2rem] hidden lg:flex" :class="taskStyles">
+				<div class="justify-center gap-x-[2rem] hidden lg:flex lg:border-none" :class="taskStyles">
 					<button
 						v-for="(item, index) in lastBtns"
 						:key="index"
@@ -82,12 +82,12 @@
 			</button>
 		</div>
 		<div
-			@dragenter="enterDiv"
-			@dragleave="leaveDiv"
+			@dragenter="divDragEnter"
+			@dragleave="divDragLeave"
 			@dragover.prevent
 			@drop="dropDiv"
 			class="my-[3rem] py-[4rem] text-center border-2 border-transparent rounded-xl text-light-gray-400 dark:text-dark-gray-600 text-[1.4rem] lg:text-[1.6rem]">
-			<p>Drag and drop to reorder list</p>
+			<p class="pointer-events-none">Drag and drop to reorder list</p>
 		</div>
 	</form>
 </template>
@@ -136,6 +136,66 @@ const checkTask = (item: string): void => {
 	}
 }
 
+const dragIndex = ref<number | null>(null)
+const hoverIndex = ref<number | null>(null)
+
+const liStartDrag = (i: number): void => {
+	dragIndex.value = i
+}
+
+const liDrop = (i: number, e: DragEvent): void => {
+	if (dragIndex.value === null) return
+	const target = e.target as HTMLElement
+	const movedItem = taskData.value[dragIndex.value]
+	taskData.value.splice(dragIndex.value, 1)
+	taskData.value.splice(i, 0, movedItem)
+	target.classList.remove('drop-target')
+}
+
+const liDragEnter = (i: number, e: DragEvent): void => {
+	hoverIndex.value = i
+	const target = e.target as HTMLElement
+	if (target.matches('li')) {
+		target.classList.add('drop-target')
+	}
+}
+
+const liDragLeave = (e: DragEvent) => {
+	const target = e.target as HTMLElement
+	if (target.matches('li')) {
+		target.classList.remove('drop-target')
+	}
+	hoverIndex.value = null
+}
+
+const divDragEnter = (e: DragEvent): void => {
+	const target = e.target as HTMLElement
+	target.classList.add('draggedBorder')
+}
+
+const divDragLeave = (e: DragEvent): void => {
+	const target = e.target as HTMLElement
+
+	if (target.matches('div')) {
+		target.classList.remove('draggedBorder')
+	}
+}
+
+const dropDiv = (e: DragEvent) => {
+	const target = e.target as HTMLElement
+	let cleanSet = new Set<number>()
+	while (cleanSet.size < taskData.value.length) {
+		cleanSet.add(Math.floor(Math.random() * taskData.value.length))
+	}
+	const cleanArr = Array.from(cleanSet)
+	let newData: string[] = []
+	for (let i = 0; i < taskData.value.length; i++) {
+		newData[i] = taskData.value[cleanArr[i]]
+	}
+	target.classList.remove('draggedBorder')
+	taskData.value = newData
+}
+
 const deleteTask = (index: number): void => {
 	taskData.value.splice(index, 1)
 }
@@ -153,70 +213,12 @@ const submitNewTask = (): void => {
 	}
 }
 
-const dragIndex = ref<number | null>(null)
-const hoverIndex = ref<number | null>(null)
-
-const startDragging = (index: number) => {
-	dragIndex.value = index
-}
-
-const dragEnterLi = (index: number, e: DragEvent) => {
-	hoverIndex.value = index
-	if ((e.currentTarget as HTMLElement).tagName === 'LI') {
-		;(e.currentTarget as HTMLElement).classList.add('drop-target')
-	}
-}
-
-const dragLeaveLi = (e: DragEvent) => {
-	hoverIndex.value = null
-	;(e.target as HTMLElement).classList.remove('drop-target')
-}
-
-const dragDrop = (index: number) => {
-	if (dragIndex.value === null) return
-
-	const movedItem = taskData.value[dragIndex.value]
-
-	taskData.value.splice(dragIndex.value, 1)
-	taskData.value.splice(index, 0, movedItem)
-	document.querySelectorAll('.drop-target').forEach(el => el.classList.remove('drop-target'))
-
-	dragIndex.value = null
-}
-
-const enterDiv = (e: DragEvent): void => {
-	;(e.currentTarget as HTMLElement).classList.add('draggedBorder')
-}
-
-const leaveDiv = (e: DragEvent): void => {
-	const target = e.currentTarget as HTMLElement
-	const related = e.relatedTarget as HTMLElement | null
-
-	if (!target.contains(related)) {
-		target.classList.remove('draggedBorder')
-	}
-}
-
-const dropDiv = (e: DragEvent): void => {
-	let cleanSet = new Set<number>([])
-	while (cleanSet.size < taskData.value.length) {
-		cleanSet.add(Math.floor(Math.random() * taskData.value.length))
-	}
-	let newArr: string[] = []
-	const cleanArr = Array.from(cleanSet)
-	cleanArr.forEach((el, i) => {
-		newArr[i] = taskData.value[cleanArr[el]]
-	})
-	taskData.value = newArr
-	;(e.currentTarget as HTMLElement).classList.remove('draggedBorder')
-}
-
 const lastBtns = ref<string[]>(['all', 'active', 'completed'])
 
 const btnStyles: string =
 	'w-[2rem] h-[2rem] mr-[1rem] rounded-full border-[1px] border-light-gray-300 dark:border-dark-gray-500 lg:w-[2.3rem] lg:h-[2.3rem] lg:mr-[2.5rem]'
 const taskStyles: string =
-	'py-[1.1rem] bg-light-gray-100 dark:bg-dark-gray-200 flex items-center px-[1.7rem] lg:px-[2.5rem] border-b-[2px] border-b-transparent'
+	'py-[1.1rem] bg-light-gray-100 dark:bg-dark-gray-200 flex items-center px-[1.7rem] lg:px-[2.5rem] border-b-[2px]'
 </script>
 
 <style lang="scss" scoped>
