@@ -18,7 +18,8 @@
 				<li
 					:draggable="true"
 					@dragstart="startDragging(index)"
-						
+					@dragenter="dragEnterLi(index, $event)"
+					@dragleave="dragLeaveLi"
 					@dragover.prevent
 					@drop="dragDrop(index)"
 					:class="taskStyles"
@@ -153,9 +154,22 @@ const submitNewTask = (): void => {
 }
 
 const dragIndex = ref<number | null>(null)
+const hoverIndex = ref<number | null>(null)
 
 const startDragging = (index: number) => {
 	dragIndex.value = index
+}
+
+const dragEnterLi = (index: number, e: DragEvent) => {
+	hoverIndex.value = index
+	if ((e.currentTarget as HTMLElement).tagName === 'LI') {
+		;(e.currentTarget as HTMLElement).classList.add('drop-target')
+	}
+}
+
+const dragLeaveLi = (e: DragEvent) => {
+	hoverIndex.value = null
+	;(e.target as HTMLElement).classList.remove('drop-target')
 }
 
 const dragDrop = (index: number) => {
@@ -165,6 +179,7 @@ const dragDrop = (index: number) => {
 
 	taskData.value.splice(dragIndex.value, 1)
 	taskData.value.splice(index, 0, movedItem)
+	document.querySelectorAll('.drop-target').forEach(el => el.classList.remove('drop-target'))
 
 	dragIndex.value = null
 }
@@ -201,11 +216,15 @@ const lastBtns = ref<string[]>(['all', 'active', 'completed'])
 const btnStyles: string =
 	'w-[2rem] h-[2rem] mr-[1rem] rounded-full border-[1px] border-light-gray-300 dark:border-dark-gray-500 lg:w-[2.3rem] lg:h-[2.3rem] lg:mr-[2.5rem]'
 const taskStyles: string =
-	'py-[1.1rem] bg-light-gray-100 dark:bg-dark-gray-200 flex items-center px-[1.7rem] lg:px-[2.5rem]'
+	'py-[1.1rem] bg-light-gray-100 dark:bg-dark-gray-200 flex items-center px-[1.7rem] lg:px-[2.5rem] border-b-[2px] border-b-transparent'
 </script>
 
 <style lang="scss" scoped>
 .draggedBorder {
 	border-color: hsl(220, 98%, 61%);
+}
+
+.drop-target {
+	border-bottom: 2px solid hsl(220, 98%, 61%);
 }
 </style>
